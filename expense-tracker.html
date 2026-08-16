@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Expense Tracker | EoNs Automation</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, Arial, sans-serif;
+            max-width: 520px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #121212;
+            color: #e0e0e0;
+        }
+        h1 {
+            text-align: center;
+            color: #fff;
+            margin-bottom: 6px;
+        }
+        .subtitle {
+            text-align: center;
+            color: #888;
+            font-size: 14px;
+            margin-bottom: 25px;
+        }
+        label {
+            display: block;
+            margin-bottom: 6px;
+            color: #bbb;
+            font-weight: 600;
+        }
+        input, select {
+            width: 100%;
+            padding: 12px;
+            border-radius: 8px;
+            border: 1px solid #444;
+            background: #1e1e1e;
+            color: white;
+            font-size: 16px;
+            box-sizing: border-box;
+            margin-bottom: 14px;
+        }
+        button {
+            width: 100%;
+            padding: 13px;
+            border: none;
+            border-radius: 8px;
+            background: #1565c0;
+            color: white;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            margin-bottom: 10px;
+        }
+        button:hover {
+            background: #0d47a1;
+        }
+        .danger {
+            background: #c62828;
+        }
+        .danger:hover {
+            background: #b71c1c;
+        }
+        #expenseList {
+            margin-top: 25px;
+        }
+        .expense-item {
+            background: #1e1e1e;
+            border: 1px solid #333;
+            border-radius: 8px;
+            padding: 12px 14px;
+            margin-bottom: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .expense-info {
+            flex: 1;
+        }
+        .category {
+            color: #90caf9;
+            font-size: 13px;
+        }
+        .amount {
+            font-weight: bold;
+            color: #81c784;
+        }
+        .total-box {
+            margin-top: 20px;
+            padding: 16px;
+            background: #1e1e1e;
+            border-radius: 8px;
+            border: 1px solid #333;
+            text-align: center;
+            font-size: 18px;
+        }
+        .delete-btn {
+            background: transparent;
+            border: 1px solid #c62828;
+            color: #ef9a9a;
+            padding: 6px 10px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 13px;
+            width: auto;
+            margin: 0;
+        }
+        .delete-btn:hover {
+            background: #c62828;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Expense Tracker</h1>
+    <p class="subtitle">EoNs Automation</p>
+
+    <label for="description">Description</label>
+    <input type="text" id="description" placeholder="e.g. Groceries">
+
+    <label for="amount">Amount ($)</label>
+    <input type="number" id="amount" placeholder="0.00" step="0.01">
+
+    <label for="category">Category</label>
+    <select id="category">
+        <option>Food</option>
+        <option>Transport</option>
+        <option>Entertainment</option>
+        <option>Bills</option>
+        <option>Other</option>
+    </select>
+
+    <button onclick="addExpense()">Add Expense</button>
+
+    <div class="total-box">
+        Total: $<span id="total">0.00</span>
+    </div>
+
+    <div id="expenseList"></div>
+
+    <script>
+        let expenses = [];
+
+        function addExpense() {
+            const description = document.getElementById("description").value.trim();
+            const amount = parseFloat(document.getElementById("amount").value);
+            const category = document.getElementById("category").value;
+
+            if (!description || isNaN(amount) || amount <= 0) {
+                alert("Please enter a valid description and amount.");
+                return;
+            }
+
+            expenses.push({ description, amount, category });
+            document.getElementById("description").value = "";
+            document.getElementById("amount").value = "";
+            renderExpenses();
+        }
+
+        function deleteExpense(index) {
+            expenses.splice(index, 1);
+            renderExpenses();
+        }
+
+        function renderExpenses() {
+            const list = document.getElementById("expenseList");
+            list.innerHTML = "";
+
+            let total = 0;
+
+            expenses.forEach((expense, index) => {
+                total += expense.amount;
+
+                const item = document.createElement("div");
+                item.className = "expense-item";
+                item.innerHTML = `
+                    <div class="expense-info">
+                        <div>${expense.description}</div>
+                        <div class="category">${expense.category}</div>
+                    </div>
+                    <div class="amount">$${expense.amount.toFixed(2)}</div>
+                    <button class="delete-btn" onclick="deleteExpense(${index})">Delete</button>
+                `;
+                list.appendChild(item);
+            });
+
+            document.getElementById("total").textContent = total.toFixed(2);
+        }
+    </script>
+
+</body>
+</html>
