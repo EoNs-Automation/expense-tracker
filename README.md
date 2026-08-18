@@ -40,3 +40,8 @@ A simple expense tracker that lets you log spending by category and view totals.
 ## About
 
 This project is part of **EoNs Automation**.
+
+## License
+
+This project is released under the MIT License.  
+For commercial use or custom versions, contact EoNs Automation.
